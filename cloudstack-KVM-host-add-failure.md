@@ -1,5 +1,5 @@
 
-# CloudStack KVM Host Add Failure – Keystore Setup Troubleshooting
+# CloudStack KVM Host Add Failure
 
 Error encountered while attempting to add a KVM host to CloudStack:
 
