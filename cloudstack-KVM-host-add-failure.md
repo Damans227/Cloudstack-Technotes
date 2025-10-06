@@ -10,7 +10,9 @@ Stack trace from management-server.log:
 
 ```java
 2025-10-03 22:36:14,828 DEBUG [c.c.h.k.d.KvmServerDiscoverer] (qtp1438988851-25:[ctx-99e0fc72, ctx-e969ec93]) (logid:a67f40bb)  
-can't setup agent, due to com.cloud.utils.exception.CloudRuntimeException: Failed to setup keystore on the KVM host: 192.168.122.10 - Failed to setup keystore on the KVM host: 192.168.122.10 com.cloud.utils.exception.CloudRuntimeException: Failed to setup keystore on the KVM host: 192.168.122.10
+can't setup agent, due to com.cloud.utils.exception.CloudRuntimeException: Failed to setup keystore on the KVM host: 192.168.122.10 
+- Failed to setup keystore on the KVM host: 192.168.122.10 
+com.cloud.utils.exception.CloudRuntimeException: Failed to setup keystore on the KVM host: 192.168.122.10
 
         at com.cloud.hypervisor.kvm.discoverer.LibvirtServerDiscoverer.setupAgentSecurity(LibvirtServerDiscoverer.java:196)
         at com.cloud.hypervisor.kvm.discoverer.LibvirtServerDiscoverer.find(LibvirtServerDiscoverer.java:339)
