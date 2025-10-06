@@ -1,2 +1,2 @@
 # Cloudstack-Technotes
-Practical Lessons from Support, SRE, and Developer Perspectives
+Practical Lessons from installing and building Cloudstack. 
