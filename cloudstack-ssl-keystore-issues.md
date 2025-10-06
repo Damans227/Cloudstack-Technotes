@@ -16,7 +16,8 @@ please see logs and configure manually!
 ```java
 2025-10-04 23:41:58,838 INFO [c.c.a.ApiServer] (qtp1438988851-22:[ctx-b8b55cff, ctx-2b748765]) (logid:046ec553) 
 Could not add host at [http://192.168.122.10] with zone [Zone {"id": "2", "name": "MyAdvancedZone", "uuid": "30d1810a-9680-49c7-8926-75fcf5e4dfb8"}], pod [HostPod {"id":1,"name":"Pod1","uuid":"996b281e-a200-4a64-9cd2-9f7fc8d0d55a"}] and cluster [Cluster {id: "1", name: "Cluster1", uuid: "c6981176-f03d-45dd-aba8-bbe3ab38e6f4"}] 
-due to: [ can't setup agent, due to com.cloud.utils.exception.CloudRuntimeException: Failed to setup certificate in the KVM agent's keystore file, please see logs and configure manually! - Failed to setup certificate in the KVM agent's keystore file, please see logs and configure manually!]. 2025-10-04 23:41:58,839 
+due to: [ can't setup agent, due to com.cloud.utils.exception.CloudRuntimeException: Failed to setup certificate in the KVM agent's keystore file, please see logs and configure manually! - Failed to setup certificate 
+in the KVM agent's keystore file, please see logs and configure manually!]. 2025-10-04 23:41:58,839 
 
 DEBUG [c.c.a.ApiServlet] (qtp1438988851-22:[ctx-b8b55cff, ctx-2b748765]) (logid:046ec553) ===END=== 192.168.122.1 -- POST addHost 2025-10-04 23:41:58,926 INFO [c.c.c.ClusterManagerImpl] (Cluster-Heartbeat-1:[ctx-b86853cb]) (logid:be4ed135) No inactive management server node found 2025-10-04 23:41:58,927 
 DEBUG [c.c.c.ClusterManagerImpl] (Cluster-Heartbeat-1:[ctx-b86853cb]) (logid:be4ed135) Peer scan is finished. profiler: Done. 
