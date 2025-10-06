@@ -1,0 +1,143 @@
+# CloudStack KVM Host Add Failure — Certificate Keystore Issue
+
+This document captures the logs and analysis of a failure while attempting to add a KVM host to a CloudStack zone, due to issues setting up the agent certificate keystore.
+
+---
+
+## Error Summary
+
+```
+DiscoveryException: Could not add host at [http://192.168.122.10]
+...
+Failed to setup certificate in the KVM agent's keystore file,
+please see logs and configure manually!
+```
+
+---
+
+## Root Cause
+
+The management server is unable to import its SSL certificate into the Java keystore of the KVM host's agent. This is necessary for secure agent-to-management-server communication.
+
+CloudStack requires this certificate to be in place before it can register and communicate with the host agent.
+
+---
+
+## Solution — Manual Keystore Setup
+
+### 1. Export or Generate the Management Certificate
+
+If your management server has a certificate available:
+
+```bash
+cp /etc/cloudstack/management/server-cert.pem /etc/cloudstack/agent/cloudstack-management-ca.pem
+```
+
+If it does **not** exist (as seen in your logs), create a self-signed cert:
+
+```bash
+mkdir -p /etc/cloudstack/agent
+
+openssl req -x509 -newkey rsa:2048 -keyout /etc/cloudstack/agent/cloudstack-ca.key \
+  -out /etc/cloudstack/agent/cloudstack-management-ca.pem \
+  -days 3650 -nodes -subj "/CN=cloudstack-ca"
+```
+
+---
+
+### 2. Import the CA Cert into the Agent Keystore
+
+```bash
+keytool -importcert \
+  -alias cloudstack-ca \
+  -file /etc/cloudstack/agent/cloudstack-management-ca.pem \
+  -keystore /etc/cloudstack/agent/cloudstack-agent.keystore \
+  -storepass cloudstack \
+  -noprompt
+```
+
+---
+
+### 3. Restart the Agent
+
+```bash
+systemctl restart cloudstack-agent
+```
+
+Watch logs:
+
+```bash
+tail -f /var/log/cloudstack/agent/agent.log
+```
+
+---
+
+### 4. Re-attempt Adding Host via UI
+
+Go to:
+
+> CloudStack UI → Infrastructure → Add Host
+
+Use:
+
+- Host: `192.168.122.10`
+- Username: `darora`
+- Password: (or SSH key)
+- Hypervisor: `KVM`
+
+You should now see the host being added successfully.
+
+---
+
+## Optional Debugging
+
+To inspect the keystore:
+
+```bash
+keytool -list -keystore /etc/cloudstack/agent/cloudstack-agent.keystore -storepass cloudstack
+```
+
+Look for:
+
+```
+cloudstack-ca, Oct 4, 2025, trustedCertEntry
+```
+
+---
+
+## Alternative: Disable Secure Communication (Not Recommended for Prod)
+
+Only for dev/testing:
+
+Edit `/etc/cloudstack/management/server.properties`:
+
+```
+agent.secure.communication=false
+```
+
+Then:
+
+```bash
+systemctl restart cloudstack-management
+```
+
+This bypasses certificate verification but weakens security.
+
+---
+
+## Final Verification
+
+Once the host is added:
+
+- Check `/var/log/cloudstack/management/management-server.log` for `Successfully added host`
+- Check `/var/log/cloudstack/agent/agent.log` for agent startup messages
+- Try deploying a test VM
+
+---
+
+##  Appendix: Relevant Logs
+
+...
+CloudRuntimeException: Failed to setup certificate in the KVM agent's keystore file, please see logs and configure manually!
+...
+AddHostCmd: Could not add host at [http://192.168.122.10] due to keystore error
