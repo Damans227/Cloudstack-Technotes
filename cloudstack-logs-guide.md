@@ -25,7 +25,7 @@ Worked a lot with:
 tail -f /var/log/cloudstack/management/management-server.log
 ```
 
-🔍 **Use grep to filter:**
+**Use grep to filter:**
 
 ```bash
 tail -f management-server.log | grep -i error
